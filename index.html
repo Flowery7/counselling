@@ -1031,8 +1031,10 @@ or you could be going through a difficult time, please don&#39;t hesitate to rea
 
 
 <div class="contact-form">
-  <form id="appointmentForm" autocomplete="on">
+  <form id="appointmentForm" autocomplete="on" aria-label="Appointment request form">
+    <!-- Name Field -->
     <div class="form-group">
+      <label for="fullName" class="visually-hidden">Full Name</label>
       <input type="text" 
              id="fullName" 
              name="name" 
@@ -1040,9 +1042,12 @@ or you could be going through a difficult time, please don&#39;t hesitate to rea
              placeholder="Your Name" 
              required
              autocomplete="name"
-             aria-label="Your full name">
+             aria-required="true">
     </div>
+
+    <!-- Email Field -->
     <div class="form-group">
+      <label for="emailAddress" class="visually-hidden">Email Address</label>
       <input type="email" 
              id="emailAddress" 
              name="email" 
@@ -1050,25 +1055,36 @@ or you could be going through a difficult time, please don&#39;t hesitate to rea
              placeholder="Your Email" 
              required
              autocomplete="email"
-             aria-label="Your email address">
+             aria-required="true">
     </div>
+
+    <!-- Phone Field -->
     <div class="form-group">
+      <label for="phoneNumber" class="visually-hidden">Phone Number</label>
       <input type="tel" 
              id="phoneNumber" 
              name="phone" 
              class="form-control" 
-             placeholder="Your Phone"
-             autocomplete="tel"
-             aria-label="Your phone number">
+             placeholder="Your Phone (Optional)"
+             autocomplete="tel-national"
+             aria-label="Phone number (optional)"
+             pattern="[0-9]{10,15}"
+             title="10-15 digit phone number">
     </div>
+
+    <!-- Message Field -->
     <div class="form-group">
+      <label for="userMessage" class="visually-hidden">Your Message</label>
       <textarea id="userMessage" 
                 name="message" 
                 class="form-control" 
                 placeholder="Your Message"
-                autocomplete="off"
-                aria-label="Your message"></textarea>
+                rows="5"
+                required
+                aria-required="true"></textarea>
     </div>
+
+    <!-- Submit Button -->
     <button type="submit" class="btn" aria-label="Submit appointment request">
       Book Appointment
     </button>
