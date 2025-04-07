@@ -1322,7 +1322,153 @@ if (newsletterForm) {
   });
 </script>
 
- 
+
+
+  
+
+  <div id="cookie-banner" class="cookie-banner">
+    <p>We use cookies to enhance your experience. By clicking Accept, you consent to the use of cookies. <a href="privacy.html">Learn more</a></p>
+    <div class="cookie-buttons">
+        <button id="accept-cookies">Accept</button>
+        <button id="reject-cookies">Reject</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const banner = document.getElementById("cookie-banner");
+        const settingsPanel = document.getElementById("cookie-settings");
+        const acceptBtn = document.getElementById("accept-cookies");
+        const rejectBtn = document.getElementById("reject-cookies");
+        const customizeBtn = document.getElementById("customize-cookies");
+        const saveSettingsBtn = document.getElementById("save-cookie-settings");
+        const analyticsCheckbox = document.getElementById("analytics-cookies");
+        const marketingCheckbox = document.getElementById("marketing-cookies");
+
+        function setCookiePreferences(preferences) {
+            localStorage.setItem("cookiePreferences", JSON.stringify(preferences));
+            banner.style.display = "none";
+        }
+
+        function loadPreferences() {
+            const savedPreferences = JSON.parse(localStorage.getItem("cookiePreferences"));
+            if (savedPreferences) {
+                if (savedPreferences.accepted) {
+                    console.log("Cookies enabled");
+                }
+                banner.style.display = "none";
+            }
+        }
+
+        acceptBtn.addEventListener("click", function() {
+            setCookiePreferences({ accepted: true, analytics: true, marketing: true });
+        });
+
+        rejectBtn.addEventListener("click", function() {
+            setCookiePreferences({ accepted: false, analytics: false, marketing: false });
+        });
+
+        customizeBtn && customizeBtn.addEventListener("click", function() {
+            settingsPanel.classList.toggle("hidden");
+        });
+
+        saveSettingsBtn && saveSettingsBtn.addEventListener("click", function() {
+            setCookiePreferences({
+                accepted: true,
+                analytics: analyticsCheckbox.checked,
+                marketing: marketingCheckbox.checked
+            });
+            settingsPanel.classList.add("hidden");
+        });
+
+        loadPreferences();
+    });
+</script>
+
+<style>
+    .cookie-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background: #222;
+        color: #fff;
+        padding: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        text-align: center;
+        width: calc(100% - 40px);
+        max-width: 380px;
+        font-family: Arial, sans-serif;
+        box-sizing: border-box;
+        z-index: 9999;
+    }
+
+    .cookie-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .cookie-banner p {
+        margin: 0 0 12px;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+
+    .cookie-banner a {
+        color: #4da8ff;
+        text-decoration: none;
+    }
+
+    .cookie-banner a:hover {
+        text-decoration: underline;
+    }
+
+    button {
+        background: #228B22;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        flex: 1;
+        max-width: 120px;
+    }
+
+    button:hover {
+        background: #1e7a1e;
+    }
+
+    button#reject-cookies {
+        background: #ff4d4d;
+    }
+
+    button#reject-cookies:hover {
+        background: #cc0000;
+    }
+
+    @media (max-width: 480px) {
+        .cookie-banner {
+            bottom: 15px;
+            width: calc(100% - 30px);
+            padding: 12px;
+        }
+        
+        .cookie-banner p {
+            font-size: 13px;
+        }
+        
+        button {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+    }
+</style>
    
    
   
