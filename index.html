@@ -1340,57 +1340,51 @@ if (newsletterForm) {
 <script>
   // Cookie Consent Script with GTM integration
   document.addEventListener("DOMContentLoaded", function() {
-    const banner = document.getElementById("cookie-banner");
-    const acceptBtn = document.getElementById("accept-cookies");
-    const rejectBtn = document.getElementById("reject-cookies");
-    
-    // Mobile-friendly event handling
-    const addMobileEvents = (element, handler) => {
-      element.addEventListener('click', handler);
-      element.addEventListener('touchstart', handler, { passive: true });
-    };
-    
-    // Set cookie that expires in 1 year
-    function setCookie(name, value) {
-      const date = new Date();
-      date.setFullYear(date.getFullYear() + 1);
-      document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; SameSite=Lax`;
-    }
-    
-    // Load GTM only after consent
-    function loadGTM() {
-      // Replace GTM-XXXXXX with your actual GTM ID
-      const gtmScript = document.createElement('script');
-      gtmScript.innerHTML = `
-                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','GTM-XXXXXX');
-            `;
-      document.head.appendChild(gtmScript);
-    }
-    
-    // Check for existing preference
-    if (document.cookie.includes('cookie_consent=accepted')) {
-      banner.style.display = 'none';
-      loadGTM();
-    } else if (document.cookie.includes('cookie_consent=rejected')) {
-      banner.style.display = 'none';
-    }
-    
-    // Event handlers
-    addMobileEvents(acceptBtn, () => {
-      setCookie('cookie_consent', 'accepted');
-      banner.style.display = 'none';
-      loadGTM();
+        const banner = document.getElementById("cookie-banner");
+        const acceptBtn = document.getElementById("accept-cookies");
+        
+        function loadGoogleTags() {
+            // Load gtag.js
+            const gtagScript = document.createElement('script');
+            gtagScript.async = true;
+            gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-PYGSN0SQCG';
+            document.head.appendChild(gtagScript);
+            
+            // Initialize dataLayer
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            
+            // Configure with consent
+            gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500 // Wait for consent update
+            });
+            
+            gtag('config', 'G-PYGSN0SQCG');
+        }
+
+        acceptBtn.addEventListener("click", function() {
+            localStorage.setItem("cookiesAccepted", "true");
+            banner.style.display = "none";
+            loadGoogleTags();
+            
+            // Update consent if gtag is loaded
+            if(window.gtag) {
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'analytics_storage': 'granted'
+                });
+            }
+        });
+
+        // Check existing preference
+        if(localStorage.getItem("cookiesAccepted") === "true") {
+            banner.style.display = "none";
+            loadGoogleTags();
+        }
     });
-    
-    addMobileEvents(rejectBtn, () => {
-      setCookie('cookie_consent', 'rejected');
-      banner.style.display = 'none';
-    });
-  });
 </script>
 
 <style>
@@ -1481,8 +1475,9 @@ if (newsletterForm) {
 
 <!-- GTM noscript fallback (place before </body> in your HTML) -->
 <noscript>
-  <iframe src="https://www.googletagmanager.com/gtag/js?id=G-PYGSN0SQCG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
+   
    
 
   
